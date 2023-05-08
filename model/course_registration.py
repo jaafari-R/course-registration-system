@@ -1,15 +1,15 @@
-from db_connect import db_connection
+from model.db_connect import db_con
 
-class CourseRegisterModel:
+class CourseRegisterationModel:
     def __init__(self):
         pass
 
     # TODO
-    def create_user(self):
-        pass
+    def create_student(self, first_name, last_name, email, password_hash, password_salt):
+        return True
 
     # TODO
-    def get_user(self):
+    def get_student(self):
         pass
 
     # TODO
