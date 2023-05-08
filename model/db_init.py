@@ -56,6 +56,7 @@ try:
             instructor VARCHAR(40) NOT NULL,
             capacity INT NOT NULL,
             schedule INT NOT NULL,
+            available BOOLEAN DEFAULT true,
             FOREIGN KEY (schedule) REFERENCES courseSchedules(id)
         );
     """)
@@ -90,7 +91,9 @@ try:
             last_name VARCHAR(15) NOT NULL,
             email VARCHAR(30) NOT NULL,
             password_hash VARCHAR(255) NOT NULL,
-            password_salt VARCHAR(255) NOT NULL
+            password_salt VARCHAR(255) NOT NULL,
+            viewed_notifications BOOLEAN DEFAULT true,
+            admin BOOLEAN
         );
     """)
 except Exception as e:
@@ -105,12 +108,26 @@ try:
             id INT PRIMARY KEY,
             student_id INT NOT NULL,
             course_code INT NOT NULL,
+            status ENUM('passed', 'failed', 'enrolled') NOT NULL,
             FOREIGN KEY (student_id) REFERENCES students(id),
             FOREIGN KEY (course_code) REFERENCES courses(code)
         )
     """)
 except Exception as e:
     print("Failed to create Student-Registration table")
+    print(str(e), "\n")
+
+
+# -- Create Notifications Table --
+try:
+    db_cursor.execute("""
+        CREATE TABLE notifications(
+            id INT PRIMARY KEY,
+            message VARCHAR(100) NOT NULL
+        )
+    """)
+except Exception as e:
+    print("Failed to create Notifications table")
     print(str(e), "\n")
 
 
