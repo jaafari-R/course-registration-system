@@ -9,20 +9,26 @@ course_reg_controller = CourseRegisterationController(course_reg_model)
 
 
 
+def verify_session(request):
+    cookie = request.cookies.get('course_reg')
+    return course_reg_controller.verifySession(cookie)
+
+
 
 @app.route('/')
 def index():
-    cookie = request.cookies.get('course_reg')
-    if not course_reg_controller.verifySession(cookie):
+    if not verify_session(request):
         return redirect(url_for('login_form'))
 
     return 'Hello'
 
 
+
+# -- Student Registration / Login -- #
+
 @app.route('/signup', methods=['GET'])
 def register_form():
-    cookie = request.cookies.get('course_reg')
-    if course_reg_controller.verifySession(cookie):
+    if verify_session(request):
         return redirect(url_for('index'))
 
     return render_template('./register.html')
@@ -30,14 +36,17 @@ def register_form():
 
 @app.route('/signin', methods=['GET'])
 def login_form():
-    cookie = request.cookies.get('course_reg')
-    if course_reg_controller.verifySession(cookie):
+    if verify_session(request):
         return redirect(url_for('index'))
+
     return render_template('./login.html')
 
 
 @app.route('/signup', methods=['POST'])
 def register():
+    if verify_session(request):
+        return redirect(url_for('index'))
+
     status, cookie, exp_date = course_reg_controller.register_student(request.form)
 
     # failed to login
@@ -51,6 +60,9 @@ def register():
 
 @app.route('/signin', methods=['POST'])
 def login():
+    if verify_session(request):
+        return redirect(url_for('index'))
+
     status, cookie, exp_date = course_reg_controller.login(request.form)
     
     # failed to login
