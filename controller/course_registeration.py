@@ -118,21 +118,8 @@ class CourseRegisterationController:
             if res == 'fail':
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res
-
-        # Check if course is integer
-        elif course_code != None and course_code != '':
-            print(type(course_code), len(course_code))
-
-            if not course_code.isdigit():
-                return 'fail', 'Course-Code must be an integer'
-            course_code = int(course_code)
-            res = self.__course_reg_model.search_courses_by_code(course_code)
-            if res == 'fail':
-                return 'fail', 'Failed to retrieve courses'
-            return 'success', res
-
         else:
-            res = self.__course_reg_model.search_courses(course_name, course_instructor)
+            res = self.__course_reg_model.search_courses(course_code, course_name, course_instructor)
             if res == 'fail':
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res
@@ -160,21 +147,8 @@ class CourseRegisterationController:
             if res == 'fail':
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res
-
-        # Check if course is integer
-        elif course_code != None and course_code != '':
-            print(type(course_code), len(course_code))
-
-            if not course_code.isdigit():
-                return 'fail', 'Course-Code must be an integer'
-            course_code = int(course_code)
-            res = self.__course_reg_model.get_enrollable_courses_by_code(student_id, course_code)
-            if res == 'fail':
-                return 'fail', 'Failed to retrieve courses'
-            return 'success', res
-
         else:
-            res = self.__course_reg_model.search_enrollable_courses(student_id, course_name, course_instructor)
+            res = self.__course_reg_model.search_enrollable_courses(student_id, course_code, course_name, course_instructor)
             if res == 'fail':
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res

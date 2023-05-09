@@ -110,31 +110,17 @@ class CourseRegisterationModel:
             return 'fail'
         return self.__db_cursor.fetchall()
 
-    def search_courses_by_code(self, code):
+    def search_courses(self, code, name, instructor):
         try: 
             query = ("""
                 SELECT name, code, instructor, capacity
                 FROM courses
                 WHERE
-                    code = %s AND
-            """)
-            data = (code,)
-            self.__db_cursor.execute(query, data)
-        except Exception as e:
-            print(str(e))
-            return 'fail'
-        return self.__db_cursor.fetchall()
-
-    def search_courses(self, name, instructor):
-        try: 
-            query = ("""
-                SELECT name, code, instructor, capacity
-                FROM courses
-                WHERE
+                    CAST(code AS CHAR) LIKE %s AND
                     name LIKE %s AND
                     instructor LIKE %s
             """)
-            data = ('%'+name+'%', '%'+instructor+'%')
+            data = ('%'+code+'%', '%'+name+'%', '%'+instructor+'%')
             print(data)
             self.__db_cursor.execute(query, data)
         except Exception as e:
@@ -148,6 +134,7 @@ class CourseRegisterationModel:
                 SELECT name, code, instructor, capacity
                 FROM courses
                 WHERE
+                    available = True AND
                     NOT (
                         SELECT COUNT(*)
                             FROM coursePrerequisites
@@ -180,51 +167,14 @@ class CourseRegisterationModel:
             return 'fail'
         return self.__db_cursor.fetchall()
 
-    def get_enrollable_courses_by_code(self, student_id, code):
+    def search_enrollable_courses(self, student_id, code, name, instructor):
         try:
             query = ("""
                 SELECT name, code, instructor, capacity
                 FROM courses
                 WHERE
-                    code = %s AND
-                    NOT (
-                        SELECT COUNT(*)
-                            FROM coursePrerequisites
-                            WHERE 
-                                coursePrerequisites.course = courses.code AND 
-                                NOT EXISTS (
-                                    SELECT course_code
-                                    FROM studentsReg
-                                    WHERE
-                                        studentsReg.student_id = %s AND
-                                        studentsReg.course_code = courses.code AND
-                                        status = 'passed'
-                                )
-                    ) AND
-                    code NOT IN (
-                        SELECT course_code
-                        FROM studentsReg
-                        WHERE
-                            student_id = %s AND
-                            (
-                                status = 'passed' OR
-                                status = 'enrolled'
-                            )
-                    )
-            """)
-            data = (code, student_id, student_id)
-            self.__db_cursor.execute(query, data)
-        except Exception as e:
-            print(str(e))
-            return 'fail'
-        return self.__db_cursor.fetchall()
-
-    def search_enrollable_courses(self, student_id, name, instructor):
-        try:
-            query = ("""
-                SELECT name, code, instructor, capacity
-                FROM courses
-                WHERE
+                    available = True AND
+                    CAST(code AS CHAR) LIKE %s AND
                     name LIKE %s AND
                     instructor LIKE %s AND
                     NOT (
@@ -252,7 +202,7 @@ class CourseRegisterationModel:
                             )
                     )
             """)
-            data = ('%'+name+'%', '%'+instructor+'%', student_id, student_id)
+            data = ('%'+code+'%', '%'+name+'%', '%'+instructor+'%', student_id, student_id)
             self.__db_cursor.execute(query, data)
         except Exception as e:
             print(str(e))
