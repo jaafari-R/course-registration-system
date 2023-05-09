@@ -130,6 +130,22 @@ except Exception as e:
     print(str(e), "\n")
 
 
+# -- Create Sessions Table --
+try:
+    db_cursor.execute("""
+        CREATE TABLE sessions(
+            cookie VARCHAR(32) PRIMARY KEY,
+            student_id INT NOT NULL,
+            expiration_date datetime NOT NULL,
+            FOREIGN KEY (student_id) REFERENCES students(id) 
+        )
+    """)
+except Exception as e:
+    print("Failed to create Sessions table")
+    print(str(e), "\n")
+
+
+
 # -- Show Databases --
 # db_cursor.execute("SHOW DATABASES")
 # for db in db_cursor:
