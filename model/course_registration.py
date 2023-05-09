@@ -219,7 +219,7 @@ class CourseRegisterationModel:
             return 'fail'
         return self.__db_cursor.fetchall()
 
-    def search_enrollable_courses(self, name, instructor):
+    def search_enrollable_courses(self, student_id, name, instructor):
         try:
             query = ("""
                 SELECT name, code, instructor, capacity
@@ -252,7 +252,7 @@ class CourseRegisterationModel:
                             )
                     )
             """)
-            data = (name, instructor, student_id, student_id)
+            data = ('%'+name+'%', '%'+instructor+'%', student_id, student_id)
             self.__db_cursor.execute(query, data)
         except Exception as e:
             print(str(e))
