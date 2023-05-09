@@ -1,7 +1,5 @@
-# for password hashing & salt
-import random
-import string
-#
+import bcrypt # for password hashing & salt
+
 
 class CourseRegisterationController:
     def __init__(self, model):
@@ -21,12 +19,13 @@ class CourseRegisterationController:
         if(not first_name.isalpha() or not last_name.isalpha()):
             return 'Student name should consist of alphabet letters only!'
 
-        # Create Salt and hashed Password
-        salt = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
-        password_hash = hash(password + salt)
+        # Create hashed Password
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(12))
+
+        print(hashed_password, len(hashed_password))
 
         # Create user in DB
-        if(not self.__course_reg_model.create_student(first_name, last_name, email, password_hash, salt)):
+        if(not self.__course_reg_model.create_student(first_name, last_name, email, hashed_password)):
             return 'Failed to create Student Account'
 
         return 'success'

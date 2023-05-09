@@ -90,8 +90,7 @@ try:
             first_name VARCHAR(15) NOT NULL,
             last_name VARCHAR(15) NOT NULL,
             email VARCHAR(30) NOT NULL,
-            password_hash VARCHAR(255) NOT NULL,
-            password_salt VARCHAR(255) NOT NULL,
+            password_hash VARCHAR(60) NOT NULL,
             viewed_notifications BOOLEAN DEFAULT true,
             admin BOOLEAN
         );
