@@ -85,14 +85,14 @@ class CourseRegisterationModel:
             return False
         return True
 
-    # TODO
-    def create_course(self):
-        pass
-
-    # TODO
-    def get_courses(self):
-        pass
-
-    # TODO
-    def search_courses(self, course_code, course_name, course_instructor):
-        pass
+    def get_all_courses(self):
+        try: 
+            query = ("""
+                SELECT *
+                FROM courses
+            """)
+            self.__db_cursor.execute(query)
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
