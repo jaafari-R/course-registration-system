@@ -106,3 +106,24 @@ class CourseRegisterationController:
             return False
 
         return True
+
+    def search_courses(self, data):
+        course_code = data['course_code']
+        course_name = data['course_name'].replace(' ', '')
+        course_instructor = data['course_name'].replace(' ', '')
+
+        # get all courses if no search options are specified
+        if course_code == None and course_name == None and course_instructor == None:
+            res = self.__course_reg_model.get_all_courses()
+            if res == 'fail':
+                return 'fail', 'Failed to retrieve courses'
+            return 'success', res
+
+        # Check if course is integer
+        if type(code) != int:
+            return 'fail', 'Course-Code must be an integer'
+
+        res = self.__course_reg_model.search_courses(course_code, course_name, course_instructor)
+        if res == 'fail':
+            return 'fail', 'Failed to retrieve courses'
+        return 'success', res
