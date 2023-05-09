@@ -1,0 +1,12 @@
+table {
+    padding-inline: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    width: 100%;
+}
+
+table td, table th{
+    border: 1px solid #ddd;
+    padding: 8px;
+}
