@@ -142,7 +142,7 @@ class CourseRegisterationModel:
             return 'fail'
         return self.__db_cursor.fetchall()
 
-    def get_enrollable_courses(slef, student_id):
+    def get_enrollable_courses(self, student_id):
         try:
             query = ("""
                 SELECT name, code, instructor, capacity
@@ -150,16 +150,17 @@ class CourseRegisterationModel:
                 WHERE
                     NOT (
                         SELECT COUNT(*)
-                        FROM coursePrerequisites
-                        WHERE 
-                            NOT EXISTS (
-                                SELECT course_code
-                                FROM studentsReg
-                                WHERE
-                                    studentsReg.student_id = %s AND
-                                    studentsReg.course_code = courses.code AND
-                                    status = 'passed'
-                            )
+                            FROM coursePrerequisites
+                            WHERE 
+                                coursePrerequisites.course = courses.code AND 
+                                NOT EXISTS (
+                                    SELECT course_code
+                                    FROM studentsReg
+                                    WHERE
+                                        studentsReg.student_id = %s AND
+                                        studentsReg.course_code = courses.code AND
+                                        status = 'passed'
+                                )
                     ) AND
                     code NOT IN (
                         SELECT course_code
@@ -172,7 +173,7 @@ class CourseRegisterationModel:
                             )
                     )
             """)
-            data = (student_id,)
+            data = (student_id, student_id)
             self.__db_cursor.execute(query, data)
         except Exception as e:
             print(str(e))
@@ -185,19 +186,20 @@ class CourseRegisterationModel:
                 SELECT name, code, instructor, capacity
                 FROM courses
                 WHERE
-                    code = %s
+                    code = %s AND
                     NOT (
                         SELECT COUNT(*)
-                        FROM coursePrerequisites
-                        WHERE 
-                            NOT EXISTS (
-                                SELECT course_code
-                                FROM studentsReg
-                                WHERE
-                                    studentsReg.student_id = %s AND
-                                    studentsReg.course_code = courses.code AND
-                                    status = 'passed'
-                            )
+                            FROM coursePrerequisites
+                            WHERE 
+                                coursePrerequisites.course = courses.code AND 
+                                NOT EXISTS (
+                                    SELECT course_code
+                                    FROM studentsReg
+                                    WHERE
+                                        studentsReg.student_id = %s AND
+                                        studentsReg.course_code = courses.code AND
+                                        status = 'passed'
+                                )
                     ) AND
                     code NOT IN (
                         SELECT course_code
@@ -210,7 +212,7 @@ class CourseRegisterationModel:
                             )
                     )
             """)
-            data = (student_id, code)
+            data = (code, student_id, student_id)
             self.__db_cursor.execute(query, data)
         except Exception as e:
             print(str(e))
@@ -227,16 +229,17 @@ class CourseRegisterationModel:
                     instructor LIKE %s AND
                     NOT (
                         SELECT COUNT(*)
-                        FROM coursePrerequisites
-                        WHERE 
-                            NOT EXISTS (
-                                SELECT course_code
-                                FROM studentsReg
-                                WHERE
-                                    studentsReg.student_id = %s AND
-                                    studentsReg.course_code = courses.code AND
-                                    status = 'passed'
-                            )
+                            FROM coursePrerequisites
+                            WHERE 
+                                coursePrerequisites.course = courses.code AND 
+                                NOT EXISTS (
+                                    SELECT course_code
+                                    FROM studentsReg
+                                    WHERE
+                                        studentsReg.student_id = %s AND
+                                        studentsReg.course_code = courses.code AND
+                                        status = 'passed'
+                                )
                     ) AND
                     code NOT IN (
                         SELECT course_code
@@ -249,7 +252,7 @@ class CourseRegisterationModel:
                             )
                     )
             """)
-            data = (student_id, code)
+            data = (name, instructor, student_id, student_id)
             self.__db_cursor.execute(query, data)
         except Exception as e:
             print(str(e))

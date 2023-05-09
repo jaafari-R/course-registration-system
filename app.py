@@ -37,7 +37,7 @@ def register_courses():
     if not verify_session(request):
         return redirect(url_for('login_form'))
 
-    status, courses = course_reg_controller.search_enrollablecourses(request.cookies.get('course_reg'), request.args)
+    status, courses = course_reg_controller.search_enrollable_courses(request.cookies.get('course_reg'), request.args)
     
     if(status == 'fail'):
         return courses

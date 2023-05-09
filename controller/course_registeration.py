@@ -101,7 +101,6 @@ class CourseRegisterationController:
 
         # check if token has expired
         expiration_date = res[0][0]
-        print(res)
         if datetime.now() > expiration_date:
             self.closeSession(cookie)
             return False
@@ -138,7 +137,7 @@ class CourseRegisterationController:
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res
 
-    def get_student_id(cookie):
+    def get_student_id(self, cookie):
         res = self.__course_reg_model.get_session_student_id(cookie)
         
         if res == 'fail' or res == []:
@@ -147,7 +146,7 @@ class CourseRegisterationController:
 
 
     def search_enrollable_courses(self, cookie, data):
-        student_id = self.get_student_id()
+        student_id = self.get_student_id(cookie)
         if(student_id == 'fail'):
             return 'Failed to retrieve courses'
 
@@ -157,7 +156,7 @@ class CourseRegisterationController:
 
         # get all courses if no search options are specified
         if course_code == None and course_name == None and course_instructor == None:
-            res = self.__course_reg_model.get_enrollable_courses()
+            res = self.__course_reg_model.get_enrollable_courses(student_id)
             if res == 'fail':
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res
@@ -169,13 +168,13 @@ class CourseRegisterationController:
             if not course_code.isdigit():
                 return 'fail', 'Course-Code must be an integer'
             course_code = int(course_code)
-            res = self.__course_reg_model.search_enrollable_by_code(course_code)
+            res = self.__course_reg_model.get_enrollable_courses_by_code(student_id, course_code)
             if res == 'fail':
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res
 
         else:
-            res = self.__course_reg_model.search_enrollable_courses(course_name, course_instructor)
+            res = self.__course_reg_model.search_enrollable_courses(student_id, course_name, course_instructor)
             if res == 'fail':
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res
