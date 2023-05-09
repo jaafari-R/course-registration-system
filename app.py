@@ -20,11 +20,11 @@ def index():
     if not verify_session(request):
         return redirect(url_for('login_form'))
 
-    return 'Hello'
+    return render_template('./courses.html')
 
 
 
-# -- Student Registration / Login -- #
+# -- Student Registration / Login / Logout -- #
 
 @app.route('/signup', methods=['GET'])
 def register_form():
