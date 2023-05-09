@@ -21,8 +21,18 @@ class CourseRegisterationModel:
         return True
 
     # TODO
-    def get_student(self):
-        pass
+    def get_student(self, email):
+        try:
+            query = ("""
+                SELECT email, password
+                FROM students
+                WHERE email = %s
+            """)
+            self.__db_cursor.execute(query, (email,))
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
 
     # TODO
     def create_course(self):

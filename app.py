@@ -28,7 +28,8 @@ def login_form():
 
 @app.route('/signin', methods=['POST'])
 def login():
-    return 'ok'
+    res = course_reg_controller.login(request.form)
+    return res
 
 
 if __name__ == "__main__":

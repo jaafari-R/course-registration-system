@@ -27,3 +27,26 @@ class CourseRegisterationController:
             return 'Failed to create Student Account'
 
         return 'success'
+
+    def login(self, data):
+        email = data['email'].replace(' ', '')
+        password = data['password']
+
+        # get student from DB
+        student = self.__course_reg_model.get_student(email)
+
+        # db error
+        if student == 'fail':
+            return 'Failed to Login'
+
+        # check if student exists
+        if(student == []):
+            return 'There is not user registered with the provided email'
+
+        student_password = student[0][1]
+
+        # check if password is valid
+        if not bcrypt.checkpw(password, student_password):
+            return 'Invalid Password'
+
+        return 'ok'
