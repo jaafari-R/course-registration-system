@@ -18,10 +18,11 @@ def register_form():
 
 @app.route('/signup', methods=['POST'])
 def register():
-    res = course_reg_controller.register_student(request.form)
-    if(res != 'success'):
-        return res
-    return "ok"
+    status, cookie = course_reg_controller.register_student(request.form)
+    res = make_response(cookie)
+    if(status == 'success'):
+        res.set_cookie('course_reg', cookie)
+    return res
 
 @app.route('/signin', methods=['GET'])
 def login_form():
