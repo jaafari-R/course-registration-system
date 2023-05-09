@@ -140,7 +140,11 @@ class CourseRegisterationModel:
                         FROM studentsReg
                         WHERE
                             student_id = %s AND
-                            status = 'passed'
+                            (
+                                status = 'passed' OR
+                                status = 'enrolled'
+                            )
+
                     ) AS passed_courses
             """)
             data = (student_id,)
