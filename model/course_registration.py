@@ -143,12 +143,12 @@ class CourseRegisterationModel:
         return self.__db_cursor.fetchall()
 
     def get_enrollable_courses(slef, student_id):
-        try: 
+        try:
             query = ("""
                 SELECT name, code, instructor, capacity
                 FROM courses
                 WHERE
-                    (
+                    NOT (
                         SELECT COUNT(*)
                         FROM coursePrerequisites
                         WHERE 
@@ -170,7 +170,7 @@ class CourseRegisterationModel:
                                 status = 'passed' OR
                                 status = 'enrolled'
                             )
-                    ) AS passed_courses
+                    )
             """)
             data = (student_id,)
             self.__db_cursor.execute(query, data)
