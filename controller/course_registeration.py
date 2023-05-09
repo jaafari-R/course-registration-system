@@ -120,12 +120,17 @@ class CourseRegisterationController:
             return 'success', res
 
         # Check if course is integer
-        print(course_code)
-        if not course_code.isdigit():
-            return 'fail', 'Course-Code must be an integer'
-        course_code = int(course_code)
+        elif(course_code != None):
+            if not course_code.isdigit():
+                return 'fail', 'Course-Code must be an integer'
+            course_code = int(course_code)
+            res = self.__course_reg_model.search_courses_by_code(course_code)
+            if res == 'fail':
+                return 'fail', 'Failed to retrieve courses'
+            return 'success', res
 
-        res = self.__course_reg_model.search_courses(course_code, course_name, course_instructor)
-        if res == 'fail':
-            return 'fail', 'Failed to retrieve courses'
-        return 'success', res
+        else:
+            res = self.__course_reg_model.search_courses(course_name, course_instructor)
+            if res == 'fail':
+                return 'fail', 'Failed to retrieve courses'
+            return 'success', res

@@ -97,18 +97,53 @@ class CourseRegisterationModel:
             return 'fail'
         return self.__db_cursor.fetchall()
 
-    def search_courses(self, code, name, instructor):
+    def search_courses_by_code(self, code):
         try: 
             query = ("""
                 SELECT name, code, instructor, capacity
                 FROM courses
                 WHERE
                     code = %s AND
+            """)
+            data = (code,)
+            self.__db_cursor.execute(query, data)
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
+
+    def search_courses(self, name, instructor):
+        try: 
+            query = ("""
+                SELECT name, code, instructor, capacity
+                FROM courses
+                WHERE
                     name LIKE %s AND
                     instructor LIKE %s
             """)
-            data = (code, '%'+name+'%', '%'+instructor+'%')
+            data = ('%'+name+'%', '%'+instructor+'%')
             print(data)
+            self.__db_cursor.execute(query, data)
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
+
+    def get_enrollable_courses(slef, student_id):
+        try: 
+            query = ("""
+                SELECT name, code, instructor, capacity
+                FROM courses
+                WHERE
+                    code NOT IN (
+                        SELECT course_code
+                        FROM studentsReg
+                        WHERE
+                            student_id = %s AND
+                            status = 'passed'
+                    ) AS passed_courses
+            """)
+            data = (student_id,)
             self.__db_cursor.execute(query, data)
         except Exception as e:
             print(str(e))
