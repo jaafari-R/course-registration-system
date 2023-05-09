@@ -60,6 +60,31 @@ class CourseRegisterationModel:
             return False
         return True
 
+    def get_session_exp_date(self, cookie):
+        try:
+            query = ("""
+                SELECT expiration_date
+                FROM sessions
+                WHERE cookie = %s
+            """)
+            self.__db_cursor.execute(query, (cookie,))
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
+
+    def delete_session(self, cookie):
+        try:
+            query = ("""
+                DELETE FROM sessions
+                WHERE cookie = %s
+            """)
+            self.__db_cursor.execute(query, (cookie,))
+        except Exception as e:
+            print(str(e))
+            return False
+        return True
+
     # TODO
     def create_course(self):
         pass

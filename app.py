@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, make_response
+from flask import Flask, request, render_template, make_response, redirect, url_for
 
 from controller.course_registeration import CourseRegisterationController
 from model.course_registration import CourseRegisterationModel
@@ -10,6 +10,10 @@ course_reg_controller = CourseRegisterationController(course_reg_model)
 
 @app.route('/')
 def index():
+    cookie = request.cookies.get('course_reg')
+    if not course_reg_controller.verifySession(cookie):
+        return redirect(url_for('login_form'))
+
     return 'Hello'
 
 @app.route('/signup', methods=['GET'])
@@ -18,10 +22,10 @@ def register_form():
 
 @app.route('/signup', methods=['POST'])
 def register():
-    status, cookie = course_reg_controller.register_student(request.form)
+    status, cookie, exp_date = course_reg_controller.register_student(request.form)
     res = make_response(cookie)
     if(status == 'success'):
-        res.set_cookie('course_reg', cookie)
+        res.set_cookie('course_reg', value=cookie, expires=exp_date)
     return res
 
 @app.route('/signin', methods=['GET'])
@@ -30,10 +34,10 @@ def login_form():
 
 @app.route('/signin', methods=['POST'])
 def login():
-    status, cookie = course_reg_controller.login(request.form)
+    status, cookie, exp_date = course_reg_controller.login(request.form)
     res = make_response(cookie)
     if(status == 'success'):
-        res.set_cookie('course_reg', cookie)
+        res.set_cookie('course_reg', value=cookie, expires=exp_date)
     return res
 
 

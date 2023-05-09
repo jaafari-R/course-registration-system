@@ -37,12 +37,12 @@ class CourseRegisterationController:
 
         # Create session and get cookie
         student_id = self.__course_reg_model.get_student_id(email)[0][0]
-        cookie = self.create_session(student_id)
+        cookie, exp_date = self.create_session(student_id)
         if cookie == 'fail':
             return 'fail', 'Failed to create a session'
 
         # return cookie
-        return 'success', cookie
+        return 'success', cookie, exp_date
 
 
     def login(self, data):
@@ -68,12 +68,12 @@ class CourseRegisterationController:
 
         # Create session and get cookie
         student_id = self.__course_reg_model.get_student_id(email)[0][0]
-        cookie = self.create_session(student_id)
+        cookie, exp_date = self.create_session(student_id)
         if cookie == 'fail':
             return 'fail', 'Failed to create a session'
 
         # return cookie
-        return 'success', cookie
+        return 'success', cookie, exp_date
     
     def create_session(self, student_id):
         cookie = secrets.token_hex(16)
@@ -82,8 +82,22 @@ class CourseRegisterationController:
         print(res)
         if not res:
             return 'fail'
-        return cookie
+        return cookie, expiration_date
 
-    def verifySession(selfcookie):
-        # if(cookie )
-        pass
+    # return True when session is Valid, otherwise False
+    def verifySession(self, cookie):
+        if cookie == None:
+            return False
+
+        res = self.__course_reg_model.get_session_exp_date(cookie)
+        
+        if res == 'fail' or res == []: 
+            return False
+
+        # check if token has expired
+        expiration_date = res[0][0]
+        if datetime.now() > expiration_date:
+            self.__course_reg_model.delete_session(cookie)
+            return False
+
+        return True
