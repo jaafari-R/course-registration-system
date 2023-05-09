@@ -135,6 +135,19 @@ class CourseRegisterationModel:
                 SELECT name, code, instructor, capacity
                 FROM courses
                 WHERE
+                    (
+                        SELECT COUNT(*)
+                        FROM coursePrerequisites
+                        WHERE 
+                            NOT EXISTS (
+                                SELECT course_code
+                                FROM studentsReg
+                                WHERE
+                                    studentsReg.student_id = %s AND
+                                    studentsReg.course_code = courses.code AND
+                                    status = 'passed'
+                            )
+                    ) AND
                     code NOT IN (
                         SELECT course_code
                         FROM studentsReg
@@ -144,7 +157,6 @@ class CourseRegisterationModel:
                                 status = 'passed' OR
                                 status = 'enrolled'
                             )
-
                     ) AS passed_courses
             """)
             data = (student_id,)
@@ -153,3 +165,5 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'
         return self.__db_cursor.fetchall()
+
+    
