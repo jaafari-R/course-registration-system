@@ -29,7 +29,7 @@ def index():
     if(status == 'fail'):
         return courses
 
-    return render_template('./courses.html', courses=courses, register=True)
+    return render_template('./courses.html', courses=courses)
 
 
 @app.route('/courses/register', methods=['GET'])
