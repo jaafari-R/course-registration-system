@@ -88,7 +88,7 @@ class CourseRegisterationModel:
     def get_all_courses(self):
         try: 
             query = ("""
-                SELECT *
+                SELECT name, code, instructor, capacity
                 FROM courses
             """)
             self.__db_cursor.execute(query)
@@ -100,7 +100,7 @@ class CourseRegisterationModel:
     def search_courses(self, code, name, instructor):
         try: 
             query = ("""
-                SELECT *
+                SELECT name, code, instructor, capacity
                 FROM courses
                 WHERE
                     code = %s OR

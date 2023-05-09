@@ -1,4 +1,30 @@
 {% extends "layout.html" %}
 
 {% block content %}
+    <form action="" method="GET">
+        <label for="course_code">Course code:</label>
+        <input type="number" name="course_code" id="course_code" placeholder="Course code">
+        <label for="course_name">Course name:</label>
+        <input type="text" name="course_name" id="course_name" placeholder="Course name">
+        <label for="course_instructor">Course instructor:</label>
+        <input type="text" name="course_instructor" id="course_instructor" placeholder="Course instructor">
+        <button>Search</button>
+    </form>
+    <table id="courses">
+        <tr>
+            <th>Course name</th>
+            <th>Course code</th>
+            <th>Course instructor</th>
+            <th>Course capacity</th>
+        </tr>
+
+        {% for course in courses %}
+            <tr>
+                {% for data in course %}
+                    <td>{{data}}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
 {% endblock %}

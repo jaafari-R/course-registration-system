@@ -108,9 +108,9 @@ class CourseRegisterationController:
         return True
 
     def search_courses(self, data):
-        course_code = data['course_code']
-        course_name = data['course_name'].replace(' ', '')
-        course_instructor = data['course_name'].replace(' ', '')
+        course_code = data.get('course_code')
+        course_name = data.get('course_name')
+        course_instructor = data.get('course_name')
 
         # get all courses if no search options are specified
         if course_code == None and course_name == None and course_instructor == None:
@@ -120,8 +120,10 @@ class CourseRegisterationController:
             return 'success', res
 
         # Check if course is integer
-        if type(code) != int:
+        print(course_code)
+        if not course_code.isdigit():
             return 'fail', 'Course-Code must be an integer'
+        course_code = int(course_code)
 
         res = self.__course_reg_model.search_courses(course_code, course_name, course_instructor)
         if res == 'fail':

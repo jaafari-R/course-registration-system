@@ -24,7 +24,12 @@ def index():
     if not verify_session(request):
         return redirect(url_for('login_form'))
 
-    return render_template('./courses.html')
+    status, courses = course_reg_controller.search_courses(request.args)
+    
+    if(status == 'fail'):
+        return courses
+
+    return render_template('./courses.html', courses=courses)
 
 
 
