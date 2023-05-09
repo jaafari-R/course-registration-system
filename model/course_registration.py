@@ -63,6 +63,19 @@ class CourseRegisterationModel:
     def get_session_exp_date(self, cookie):
         try:
             query = ("""
+                SELECT student_id
+                FROM sessions
+                WHERE cookie = %s
+            """)
+            self.__db_cursor.execute(query, (cookie,))
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
+
+    def get_session_student_id(self, cookie):
+        try:
+            query = ("""
                 SELECT expiration_date
                 FROM sessions
                 WHERE cookie = %s
