@@ -6,3 +6,5 @@ db_con = mysql.connector.connect(
     host='127.0.0.1',
     database='course_register'
 )
+
+db_con.autocommit = True

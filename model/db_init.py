@@ -86,11 +86,11 @@ except Exception as e:
 try:
     db_cursor.execute("""
         CREATE TABLE students(
-            id INT PRIMARY KEY,
+            id INT AUTO_INCREMENT PRIMARY KEY,
             first_name VARCHAR(15) NOT NULL,
             last_name VARCHAR(15) NOT NULL,
             email VARCHAR(30) NOT NULL,
-            password_hash VARCHAR(60) NOT NULL,
+            password VARCHAR(60) NOT NULL,
             viewed_notifications BOOLEAN DEFAULT true,
             admin BOOLEAN
         );
