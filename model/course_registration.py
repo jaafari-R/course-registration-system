@@ -4,7 +4,6 @@ class CourseRegisterationModel:
     def __init__(self):
         self.__db_cursor = db_con.cursor()
 
-    # TODO
     def create_student(self, first_name, last_name, email, hashed_password):
         try:
             query = ("""
@@ -20,11 +19,10 @@ class CourseRegisterationModel:
             return False
         return True
 
-    # TODO
-    def get_student(self, email):
+    def get_student_id(self, email):
         try:
             query = ("""
-                SELECT email, password
+                SELECT id
                 FROM students
                 WHERE email = %s
             """)
@@ -33,6 +31,34 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'
         return self.__db_cursor.fetchall()
+
+    def get_student_password(self, email):
+        try:
+            query = ("""
+                SELECT password
+                FROM students
+                WHERE email = %s
+            """)
+            self.__db_cursor.execute(query, (email,))
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
+
+    def create_session(self, student_id, cookie, expiration_date):
+        try:
+            query = ("""
+                INSERT INTO sessions
+                (cookie, student_id, expiration_date)
+                VALUES
+                (%s, %s, %s)
+            """)
+            data = (cookie, student_id, expiration_date)
+            self.__db_cursor.execute(query, data)
+        except Exception as e:
+            print(str(e))
+            return False
+        return True
 
     # TODO
     def create_course(self):

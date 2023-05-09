@@ -1,4 +1,5 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, make_response
+
 from controller.course_registeration import CourseRegisterationController
 from model.course_registration import CourseRegisterationModel
 
@@ -28,7 +29,10 @@ def login_form():
 
 @app.route('/signin', methods=['POST'])
 def login():
-    res = course_reg_controller.login(request.form)
+    status, cookie = course_reg_controller.login(request.form)
+    res = make_response(cookie)
+    if(status == 'success'):
+        res.set_cookie('course_reg', cookie)
     return res
 
 
