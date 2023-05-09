@@ -103,11 +103,12 @@ class CourseRegisterationModel:
                 SELECT name, code, instructor, capacity
                 FROM courses
                 WHERE
-                    code = %s OR
-                    name LIKE %s
+                    code = %s AND
+                    name LIKE %s AND
                     instructor LIKE %s
             """)
             data = (code, '%'+name+'%', '%'+instructor+'%')
+            print(data)
             self.__db_cursor.execute(query, data)
         except Exception as e:
             print(str(e))
