@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/layout.css') }}">
     <title>Document</title>
 </head>
 <body>
     <nav>
-        <a href="courses">Courses</a>
-        <a href="courses/register">Register Courses</a>
-        <a href="signout">Logout</a>
+        <div class="pages">
+            <a href="student/registered">My Courses</a>
+            <a href="courses">All Courses</a>
+            <a href="courses/register">Register Courses</a>
+            <a href="student/passed">Passed Courses</a>
+        </div>
+        <div class="logout">
+            <a href="signout">Logout</a>
+        </div>
     </nav>
     <div id="content">
         {% block content %}{% endblock %}

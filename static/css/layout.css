@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+}
+
+nav {
+    background-color: #222;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+nav div {
+    vertical-align: middle;
+}
+
+nav .pages {
+    display: inline-block;
+    padding-inline: 10%;
+}
+
+
+nav .logout {
+    display: inline;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    padding: 2em;
+}
+
+nav a:hover {
+    color: red;
+}
