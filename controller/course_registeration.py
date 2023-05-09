@@ -22,8 +22,6 @@ class CourseRegisterationController:
         # Create hashed Password
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(12))
 
-        print(hashed_password, len(hashed_password))
-
         # Create user in DB
         if(not self.__course_reg_model.create_student(first_name, last_name, email, hashed_password)):
             return 'Failed to create Student Account'
