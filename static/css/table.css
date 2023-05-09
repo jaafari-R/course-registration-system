@@ -10,3 +10,7 @@ table td, table th{
     border: 1px solid #ddd;
     padding: 8px;
 }
+
+table button {
+    background-color: rgb(217, 255, 217);
+}

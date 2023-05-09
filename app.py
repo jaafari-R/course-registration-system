@@ -29,9 +29,22 @@ def index():
     if(status == 'fail'):
         return courses
 
-    return render_template('./courses.html', courses=courses)
+    return render_template('./courses.html', courses=courses, register=True)
 
 
+@app.route('/courses/register', methods=['GET'])
+def register_courses():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
+
+    
+    return 'test'
+
+
+@app.route('/course/register', methods=['POST'])
+def register_course():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
 
 # -- Student Registration / Login / Logout -- #
 

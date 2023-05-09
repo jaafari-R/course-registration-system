@@ -14,10 +14,15 @@
     </form>
     <table id="courses">
         <tr>
-            <th>Course name</th>
-            <th>Course code</th>
-            <th>Course instructor</th>
-            <th>Course capacity</th>
+                <th>Course name</th>
+                <th>Course code</th>
+                <th>Course instructor</th>
+                <th>Course capacity</th>
+                {% if register %}
+                    <form action="">
+                    <th>Action</th>
+                {% endif %}
+            </form>
         </tr>
 
         {% for course in courses %}
@@ -25,6 +30,15 @@
                 {% for data in course %}
                     <td>{{data}}</td>
                 {% endfor %}
+                {% if register %}
+                    <td>
+                        <form action="/course/register", method="POST">
+                            {{data}}
+                            <input type="hidden" name="course_code" value="{{ course[1] }}">
+                            <button>Register Course</button>
+                        </form>
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>

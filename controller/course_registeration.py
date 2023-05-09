@@ -110,7 +110,7 @@ class CourseRegisterationController:
     def search_courses(self, data):
         course_code = data.get('course_code')
         course_name = data.get('course_name')
-        course_instructor = data.get('course_name')
+        course_instructor = data.get('course_instructor')
 
         # get all courses if no search options are specified
         if course_code == None and course_name == None and course_instructor == None:
@@ -120,7 +120,9 @@ class CourseRegisterationController:
             return 'success', res
 
         # Check if course is integer
-        elif(course_code != None):
+        elif course_code != None and course_code != '':
+            print(type(course_code), len(course_code))
+
             if not course_code.isdigit():
                 return 'fail', 'Course-Code must be an integer'
             course_code = int(course_code)
@@ -131,6 +133,48 @@ class CourseRegisterationController:
 
         else:
             res = self.__course_reg_model.search_courses(course_name, course_instructor)
+            if res == 'fail':
+                return 'fail', 'Failed to retrieve courses'
+            return 'success', res
+
+    def get_student_id(cookie):
+        res = self.__course_reg_model.get_session_student_id(cookie)
+        
+        if res == 'fail' or res == []:
+            return 'fail'
+        return res[0][0]
+
+
+    def search_enrollable_courses(self, cookie, data):
+        student_id = self.get_student_id()
+        if(student_id == 'fail'):
+            return 'Failed to retrieve courses'
+
+        course_code = data.get('course_code')
+        course_name = data.get('course_name')
+        course_instructor = data.get('course_instructor')
+
+        # get all courses if no search options are specified
+        if course_code == None and course_name == None and course_instructor == None:
+            res = self.__course_reg_model.get_enrollable_courses()
+            if res == 'fail':
+                return 'fail', 'Failed to retrieve courses'
+            return 'success', res
+
+        # Check if course is integer
+        elif course_code != None and course_code != '':
+            print(type(course_code), len(course_code))
+
+            if not course_code.isdigit():
+                return 'fail', 'Course-Code must be an integer'
+            course_code = int(course_code)
+            res = self.__course_reg_model.search_enrollable_by_code(course_code)
+            if res == 'fail':
+                return 'fail', 'Failed to retrieve courses'
+            return 'success', res
+
+        else:
+            res = self.__course_reg_model.search_enrollable_courses(course_name, course_instructor)
             if res == 'fail':
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res

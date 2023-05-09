@@ -179,4 +179,79 @@ class CourseRegisterationModel:
             return 'fail'
         return self.__db_cursor.fetchall()
 
-    
+    def get_enrollable_courses_by_code(self, student_id, code):
+        try:
+            query = ("""
+                SELECT name, code, instructor, capacity
+                FROM courses
+                WHERE
+                    code = %s
+                    NOT (
+                        SELECT COUNT(*)
+                        FROM coursePrerequisites
+                        WHERE 
+                            NOT EXISTS (
+                                SELECT course_code
+                                FROM studentsReg
+                                WHERE
+                                    studentsReg.student_id = %s AND
+                                    studentsReg.course_code = courses.code AND
+                                    status = 'passed'
+                            )
+                    ) AND
+                    code NOT IN (
+                        SELECT course_code
+                        FROM studentsReg
+                        WHERE
+                            student_id = %s AND
+                            (
+                                status = 'passed' OR
+                                status = 'enrolled'
+                            )
+                    )
+            """)
+            data = (student_id, code)
+            self.__db_cursor.execute(query, data)
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
+
+    def search_enrollable_courses(self, name, instructor):
+        try:
+            query = ("""
+                SELECT name, code, instructor, capacity
+                FROM courses
+                WHERE
+                    name LIKE %s AND
+                    instructor LIKE %s AND
+                    NOT (
+                        SELECT COUNT(*)
+                        FROM coursePrerequisites
+                        WHERE 
+                            NOT EXISTS (
+                                SELECT course_code
+                                FROM studentsReg
+                                WHERE
+                                    studentsReg.student_id = %s AND
+                                    studentsReg.course_code = courses.code AND
+                                    status = 'passed'
+                            )
+                    ) AND
+                    code NOT IN (
+                        SELECT course_code
+                        FROM studentsReg
+                        WHERE
+                            student_id = %s AND
+                            (
+                                status = 'passed' OR
+                                status = 'enrolled'
+                            )
+                    )
+            """)
+            data = (student_id, code)
+            self.__db_cursor.execute(query, data)
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
