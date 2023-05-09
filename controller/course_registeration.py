@@ -85,6 +85,10 @@ class CourseRegisterationController:
         
         return cookie, expiration_date
 
+    def closeSession(self, cookie):
+        if(cookie != None):
+            self.__course_reg_model.delete_session(cookie)
+
     # return True when session is Valid, otherwise False
     def verifySession(self, cookie):
         if cookie == None:
@@ -98,7 +102,7 @@ class CourseRegisterationController:
         # check if token has expired
         expiration_date = res[0][0]
         if datetime.now() > expiration_date:
-            self.__course_reg_model.delete_session(cookie)
+            self.closeSession(cookie)
             return False
 
         return True

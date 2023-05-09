@@ -13,6 +13,10 @@ def verify_session(request):
     cookie = request.cookies.get('course_reg')
     return course_reg_controller.verifySession(cookie)
 
+def close_session(request):
+    cookie = request.cookies.get('course_reg')
+    course_reg_controller.closeSession(cookie)
+
 
 
 @app.route('/')
@@ -71,6 +75,15 @@ def login():
     
     res = make_response(redirect(url_for('index')))
     res.set_cookie('course_reg', value=cookie, expires=exp_date)
+    return res
+
+@app.route('/signout', methods=['GET'])
+def logout():
+    # close session from server side
+    close_session(request)
+    # close session from client side & redirect to login page
+    res = make_response(redirect(url_for('login_form')))
+    res.delete_cookie('course_reg')
     return res
 
 
