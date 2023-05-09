@@ -63,7 +63,7 @@ class CourseRegisterationModel:
     def get_session_exp_date(self, cookie):
         try:
             query = ("""
-                SELECT student_id
+                SELECT expiration_date
                 FROM sessions
                 WHERE cookie = %s
             """)
@@ -76,7 +76,7 @@ class CourseRegisterationModel:
     def get_session_student_id(self, cookie):
         try:
             query = ("""
-                SELECT expiration_date
+                SELECT student_id
                 FROM sessions
                 WHERE cookie = %s
             """)

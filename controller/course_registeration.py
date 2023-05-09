@@ -101,6 +101,7 @@ class CourseRegisterationController:
 
         # check if token has expired
         expiration_date = res[0][0]
+        print(res)
         if datetime.now() > expiration_date:
             self.closeSession(cookie)
             return False

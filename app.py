@@ -37,14 +37,19 @@ def register_courses():
     if not verify_session(request):
         return redirect(url_for('login_form'))
 
+    status, courses = course_reg_controller.search_enrollablecourses(request.cookies.get('course_reg'), request.args)
     
-    return 'test'
+    if(status == 'fail'):
+        return courses
+
+    return render_template('./courses.html', courses=courses, register=True)
 
 
 @app.route('/course/register', methods=['POST'])
 def register_course():
     if not verify_session(request):
         return redirect(url_for('login_form'))
+
 
 # -- Student Registration / Login / Logout -- #
 
