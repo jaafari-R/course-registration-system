@@ -331,3 +331,17 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'
         return self.__db_cursor.fetchall()
+
+    def get_student_name(self, student_id):
+        try:
+            query = ("""
+                SELECT first_name, last_name
+                FROM students
+                WHERE id = %s
+            """)
+            self.__db_cursor.execute(query, (student_id,))
+        except:
+            print(str(e))
+            return 'fail'      
+        return self.__db_cursor.fetchall()
+            
