@@ -18,9 +18,9 @@ def close_session(request):
     course_reg_controller.closeSession(cookie)
 
 
-
+# view All courses
 @app.route('/')
-def index():
+def index(): 
     if not verify_session(request):
         return redirect(url_for('login_form'))
 
@@ -31,7 +31,7 @@ def index():
 
     return render_template('./courses.html', courses=courses)
 
-
+# view enrollable courses
 @app.route('/courses/register', methods=['GET'])
 def register_courses():
     if not verify_session(request):
@@ -44,7 +44,21 @@ def register_courses():
 
     return render_template('./courses.html', courses=courses, register=True)
 
+# view a single course
+@app.route('/courses', methods=['GET'])
+def single_course():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
 
+    status, course, prerequisites = course_reg_controller.get_course(request.args)
+
+    if(status == 'fail'):
+        return course
+
+    print(course)
+    return render_template('./course.html', course=course, prerequisites=prerequisites)
+
+# student register into a cours
 @app.route('/course/register', methods=['POST'])
 def register_course():
     if not verify_session(request):

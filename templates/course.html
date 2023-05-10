@@ -1,11 +1,15 @@
 {% extends "layout.html" %}
 
 {% block content %}    
-    <h2>{{course[0]}}</h2>
-    <h3>Course code: {{course[1]}}</h3>
-    <h4>Instructor: {{course[2]}}</h4>
-    <h5>Course capacity: {{course[3]}}</h5>
-    <h6>Prerequisite courses: {{course[4]}}</h6>
-    <p>{{course[5]}}</p>
+    <h2>{{course[1]}}</h2>
+    <h3>Course code: {{course[0]}}</h3>
+    <h3>Instructor: {{course[3]}}</h3>
+    <h3>Course capacity: {{course[4]}}</h3>
+    <h3>Prerequisite courses: 
+        {% for prereq in prerequisites %}
+            <a href="/courses?code={{prereq[0]}}">{{prereq[0]}}</a>
+        {% endfor %}
+    </h3>
+    <h4>Description: {{course[2]}}</h4>
 
 {% endblock %}x

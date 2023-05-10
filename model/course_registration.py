@@ -216,7 +216,20 @@ class CourseRegisterationModel:
                 FROM courses
                 WHERE code = %s
             """)
-            self.__db_cursor(query, (code,))
+            self.__db_cursor.execute(query, (code,))
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
+
+    def get_course_prerequisites(self, code):
+        try:
+            query = ("""
+                SELECT prerequisite_course
+                FROM coursePrerequisites
+                WHERE course = %s
+            """)
+            self.__db_cursor.execute(query, (code,))
         except Exception as e:
             print(str(e))
             return 'fail'
