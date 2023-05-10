@@ -4,6 +4,8 @@ from controller.course_registeration import CourseRegisterationController
 from model.course_registration import CourseRegisterationModel
 
 app = Flask(__name__)
+app.jinja_env.filters['zip'] = zip
+
 course_reg_model = CourseRegisterationModel()
 course_reg_controller = CourseRegisterationController(course_reg_model)
 
@@ -24,12 +26,12 @@ def index():
     if not verify_session(request):
         return redirect(url_for('login_form'))
 
-    status, courses = course_reg_controller.search_courses(request.args)
+    status, courses, course_registrations = course_reg_controller.search_courses(request.args)
     
     if(status == 'fail'):
         return courses
 
-    return render_template('./courses.html', courses=courses)
+    return render_template('./courses.html', courses=courses, course_registrations=course_registrations)
 
 
 # view enrollable courses
@@ -38,12 +40,12 @@ def register_courses():
     if not verify_session(request):
         return redirect(url_for('login_form'))
 
-    status, courses = course_reg_controller.search_enrollable_courses(request.cookies.get('course_reg'), request.args)
+    status, courses, course_registrations = course_reg_controller.search_enrollable_courses(request.cookies.get('course_reg'), request.args)
     
     if(status == 'fail'):
         return courses
 
-    return render_template('./courses.html', courses=courses, register=True)
+    return render_template('./courses.html', courses=courses, course_registrations=course_registrations, register=True)
 
 
 # view a single course
@@ -83,12 +85,12 @@ def student_courses():
         return redirect(url_for('login_form'))
 
     cookie = request.cookies.get('course_reg')
-    status, courses = course_reg_controller.get_student_courses(cookie)
+    status, courses, course_registrations = course_reg_controller.get_student_courses(cookie)
 
     if status == 'fail':
         return courses
 
-    return render_template('./courses.html', courses=courses)
+    return render_template('./courses.html', courses=courses, course_registrations=course_registrations)
 
 
 # Analysis page

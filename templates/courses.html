@@ -25,12 +25,12 @@
             </form>
         </tr>
 
-        {% for course in courses %}
+        {% for course, course_reg_count in courses|zip(course_registrations) %}
             <tr>
                 <td><a href="/courses?code={{course[1]}}">{{course[0]}}</a></td>
                 <td>{{course[1]}}</td>
                 <td>{{course[2]}}</td>
-                <td>{{course[3]}}</td>
+                <td>{{course_reg_count}}/{{course[3]}}</td>
                 {% if register %}
                     <td>
                         <form action="/course/register", method="POST">

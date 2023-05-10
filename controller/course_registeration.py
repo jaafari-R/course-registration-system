@@ -107,22 +107,34 @@ class CourseRegisterationController:
 
         return True
 
+
+    # get number of studentes registered in each course
+    def registered_students_in_courses(self, courses):
+        registered_students = []
+        for course in courses:
+            registered_students.append(self.__course_reg_model.course_students_count(course[1])[0][0])
+        return registered_students
+
     def search_courses(self, data):
         course_code = data.get('course_code')
         course_name = data.get('course_name')
         course_instructor = data.get('course_instructor')
 
+        res = None
+
         # get all courses if no search options are specified
         if course_code == None and course_name == None and course_instructor == None:
             res = self.__course_reg_model.get_all_courses()
-            if res == 'fail':
-                return 'fail', 'Failed to retrieve courses'
-            return 'success', res
         else:
             res = self.__course_reg_model.search_courses(course_code, course_name, course_instructor)
-            if res == 'fail':
-                return 'fail', 'Failed to retrieve courses'
-            return 'success', res
+
+        if res == 'fail':
+            return 'fail', 'Failed to retrieve courses', None
+
+        # get number of studentes registered in each course
+        registered_students = self.registered_students_in_courses(res)
+
+        return 'success', res, registered_students
 
     def get_student_id(self, cookie):
         res = self.__course_reg_model.get_session_student_id(cookie)
@@ -135,23 +147,27 @@ class CourseRegisterationController:
     def search_enrollable_courses(self, cookie, data):
         student_id = self.get_student_id(cookie)
         if(student_id == 'fail'):
-            return 'Failed to retrieve courses'
+            return 'fail', 'Failed to retrieve courses', None
 
         course_code = data.get('course_code')
         course_name = data.get('course_name')
         course_instructor = data.get('course_instructor')
 
+        res = None
+
         # get all courses if no search options are specified
         if course_code == None and course_name == None and course_instructor == None:
             res = self.__course_reg_model.get_enrollable_courses(student_id)
-            if res == 'fail':
-                return 'fail', 'Failed to retrieve courses'
-            return 'success', res
         else:
             res = self.__course_reg_model.search_enrollable_courses(student_id, course_code, course_name, course_instructor)
-            if res == 'fail':
-                return 'fail', 'Failed to retrieve courses'
-            return 'success', res
+        
+        if res == 'fail':
+            return 'fail', 'Failed to retrieve courses', None
+
+        # get number of studentes registered in each course
+        registered_students = self.registered_students_in_courses(res)
+
+        return 'success', res, registered_students
 
     def get_course(self, data):
         course_code = data.get('code')
@@ -215,15 +231,18 @@ class CourseRegisterationController:
         student_id = self.__course_reg_model.get_session_student_id(cookie)
 
         if student_id == 'fail':
-            return 'fail', 'Failed to retrieve course'
+            return 'fail', 'Failed to retrieve course', None
         student_id = student_id[0][0]
 
         courses = self.__course_reg_model.get_registered_courses(student_id)
 
         if courses == 'fail':
-            return 'fail', 'Failed to retrieve course'
+            return 'fail', 'Failed to retrieve course', None
 
-        return 'success', courses
+        # get number of studentes registered in each course
+        registered_students = self.registered_students_in_courses(courses)
+
+        return 'success', courses, registered_students
 
     def get_courses_most_enrolled(self):
         courses = self.__course_reg_model.get_courses_most_enrolled()

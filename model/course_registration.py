@@ -447,13 +447,13 @@ class CourseRegisterationModel:
         try:
             query = ("""
                 SELECT COUNT(*)
-                FROM sudentsReg
+                FROM studentsReg
                 WHERE 
                     course_code = %s AND
                     status = 'enrolled'
             """)
             self.__db_cursor.execute(query, (course_code,))
-        except:
+        except Exception as e:
             print(str(e))
             return 'fail'      
         return self.__db_cursor.fetchall()
