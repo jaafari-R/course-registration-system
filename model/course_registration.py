@@ -208,3 +208,16 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'
         return self.__db_cursor.fetchall()
+
+    def get_course(self, code):
+        try:
+            query = ("""
+                SELECT *
+                FROM courses
+                WHERE code = %s
+            """)
+            self.__db_cursor(query, (code,))
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
