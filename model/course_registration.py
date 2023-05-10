@@ -221,3 +221,22 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'
         return self.__db_cursor.fetchall()
+
+    def get_registered_courses(self, student_id):
+        try:
+            query = ("""
+                SELECT name, code, instructor, capacity
+                FROM courses
+                WHERE code IN (
+                    SELECT course_code 
+                    FROM studentsReg
+                    WHERE 
+                        student_id = %s AND
+                        status = 'enrolled'
+                )
+            """)
+            self.__db_cursor(query, (student_id,))
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
