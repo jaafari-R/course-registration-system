@@ -14,3 +14,8 @@ table td, table th{
 table button {
     background-color: rgb(217, 255, 217);
 }
+
+table a {
+    text-decoration: none;
+    color: rgb(0, 10, 66);
+}
