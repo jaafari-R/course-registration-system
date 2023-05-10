@@ -159,7 +159,7 @@ class CourseRegisterationController:
         course = self.__course_reg_model.get_course(course_code)
         prerequisites = self.__course_reg_model.get_course_prerequisites(course_code)
 
-        if course == 'fail':
+        if course == 'fail' or prerequisites == 'fail':
             return 'fail', 'Failed to retrieve course information', None
 
         if course == []:
