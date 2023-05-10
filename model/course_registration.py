@@ -258,6 +258,7 @@ class CourseRegisterationModel:
                         status = 'enrolled'
                 )
             """)
+            self.__db_cursor.execute(query, (student_id,))
         except Exception as e:
             print(str(e))
             return 'fail'
