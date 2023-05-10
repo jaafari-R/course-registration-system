@@ -315,3 +315,19 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'
         return self.__db_cursor.fetchall()
+
+    # get the schedules of all the courses registered by a student
+    def get_student_schedule(self, student_id):
+        try:
+            query = ("""
+                SELECT courseSchedules.id, courseSchedules.start_time, courseSchedules.end_time, courseSchedules.days
+                FROM courses
+                INNER JOIN studentReg ON courses.code = studentReg.course_code
+                INNER JOIN courseSchedules ON courses.schedule = courseSchedules.id
+                WHERE studentReg.student_id = %s
+            """)
+            self.__db_cursor.execute(query, (student,))
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
