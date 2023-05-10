@@ -402,3 +402,36 @@ class CourseRegisterationModel:
             print(str(e))
             return False    
         return True
+
+    # get courses ordered by the most popular
+    def get_courses_most_popular(self):
+        try:
+            query = ("""
+                SELECT c.name, c.code, c.instructor, COUNT(*) AS reg_count
+                FROM courses c
+                LEFT JOIN studentsReg sr
+                ON c.code = sr.course_code
+                GROUP BY c.code
+                ORDER BY reg_count DESC
+            """)
+        except:
+            print(str(e))
+            return 'fail'      
+        return self.__db_cursor.fetchall()
+
+    # get courses ordered by the most enrolled
+    def get_courses_most_enrolled(self):
+        try:
+            query = ("""
+                SELECT c.name, c.code c.instructor, COUNT(*) AS enroll_count
+                FROM courses c
+                LEFT JOIN studentsReg sr
+                ON c.code = sr.course_code
+                WHERE sr.status = 'enrolled'
+                GROUP BY c.code
+                ORDER BY enroll_count DESC
+            """)
+        except:
+            print(str(e))
+            return 'fail'      
+        return self.__db_cursor.fetchall()
