@@ -286,4 +286,6 @@ class CourseRegisterationModel:
         except Exception as e:
             print(str(e))
             return 'fail'
-        return True
+        return self.__db_cursor.fetchall()
+
+    
