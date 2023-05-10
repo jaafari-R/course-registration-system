@@ -302,3 +302,16 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'
         return self.__db_cursor.fetchall()
+
+    def get_course_schedule(self, course_code):
+        try:
+            query = ("""
+                "SELECT start_time, end_time, days "
+                "FROM courseSchedules "
+                "WHERE id = (SELECT courseSchedules.id FROM courses WHERE code = %s)"
+            """)
+            data = (student_id, course_code, course_code, course_code, course_code)
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return self.__db_cursor.fetchall()
