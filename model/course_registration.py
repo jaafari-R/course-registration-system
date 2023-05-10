@@ -283,9 +283,10 @@ class CourseRegisterationModel:
                             )
                 )
             """)
+            data = (course_code, student_id, course_code)
+            self.__db_cursor.execute(query, data)
         except Exception as e:
             print(str(e))
             return 'fail'
         return self.__db_cursor.fetchall()
 
-    
