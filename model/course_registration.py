@@ -263,3 +263,27 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'
         return self.__db_cursor.fetchall()
+
+    # Returns True if the student has passed the prerequisites of a course
+    def passed_prerequisites_of_course(self, student_id, course_code):
+        try:
+            query = ("""
+                SELECT NOT (
+                    SELECT COUNT(*)
+                        FROM coursePrerequisites
+                        WHERE 
+                            coursePrerequisites.course = %s AND 
+                            NOT EXISTS (
+                                SELECT course_code
+                                FROM studentsReg
+                                WHERE
+                                    studentsReg.student_id = %s AND
+                                    studentsReg.course_code = %s AND
+                                    status = 'passed'
+                            )
+                )
+            """)
+        except Exception as e:
+            print(str(e))
+            return 'fail'
+        return True
