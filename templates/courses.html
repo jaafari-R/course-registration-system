@@ -27,13 +27,13 @@
 
         {% for course in courses %}
             <tr>
-                {% for data in course %}
-                    <td>{{data}}</td>
-                {% endfor %}
+                <td><a href="/courses?code={{course[1]}}">{{course[0]}}</a></td>
+                <td>{{course[1]}}</td>
+                <td>{{course[2]}}</td>
+                <td>{{course[3]}}</td>
                 {% if register %}
                     <td>
                         <form action="/course/register", method="POST">
-                            {{data}}
                             <input type="hidden" name="course_code" value="{{ course[1] }}">
                             <button>Register Course</button>
                         </form>
@@ -42,5 +42,4 @@
             </tr>
         {% endfor %}
     </table>
-
 {% endblock %}
