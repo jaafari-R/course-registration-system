@@ -1,0 +1,15 @@
+.analysis {
+    padding-inline: 30%;
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 2em;
+}
+
+.analysis a {
+    padding: 0.5em;
+    background-color: #ccc;
+    border: solid black 0.1em;
+    border-radius: 1em;
+    text-decoration: none;
+    color: black;
+}

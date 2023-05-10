@@ -88,10 +88,44 @@ def student_courses():
     if status == 'fail':
         return courses
 
-    return render_template('./courses.html', courses=courses,)
+    return render_template('./courses.html', courses=courses)
+
+
+# Analysis page
+@app.route('/analysis', methods=['GET'])
+def analysis():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
+
+    return render_template('./analysis.html')
+
+# Most Enrolled Courses
+@app.route('/analysis/most_enrolled', methods=['GET'])
+def most_enrolled():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
+
+    status, courses = course_reg_controller.get_courses_most_enrolled()
+
+    if status == 'fail':
+        return courses
+
+    return render_template('./courses_analysis.html', courses=courses)
+
+# Most Popular Courses
+@app.route('/analysis/most_popular', methods=['GET'])
+def most_popular():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
+
+    status, courses = course_reg_controller.get_courses_most_popular()
+
+    if status == 'fail':
+        return courses
+
+    return render_template('./courses_analysis.html', courses=courses, most_popular=True)
 
 # -- Student Registration / Login / Logout -- #
-
 
 # Register Form
 @app.route('/signup', methods=['GET'])

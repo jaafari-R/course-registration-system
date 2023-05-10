@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/analysis.css') }}">
+    <div class='analysis'>
+        <a href="/analysis/most_enrolled">Most Enrolled</a>
+        <a href="/analysis/most_popular">Most Popular/Registered</a>
+    </div>
+
+    {% block sub_content %}{% endblock %}
+{% endblock %}

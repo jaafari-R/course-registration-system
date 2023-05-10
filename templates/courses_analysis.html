@@ -1,0 +1,37 @@
+{% extends "analysis.html" %}
+
+{% block sub_content %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/table.css') }}">
+
+    <table id="courses">
+        <tr>
+                <th>Course name</th>
+                <th>Course code</th>
+                <th>Course instructor</th>
+                {% if most_popular %}
+                <th>Registeration Count</th>
+                {% else %}
+                <th>Enrolled Students</th>
+                {% endif %}
+            </form>
+        </tr>
+
+        {% for course in courses %}
+            <tr>
+                <td><a href="/courses?code={{course[1]}}">{{course[0]}}</a></td>
+                <td>{{course[1]}}</td>
+                <td>{{course[2]}}</td>
+                <td>{{course[3]}}</td>
+                {% if register %}
+                    <td>
+                        <form action="/course/register", method="POST">
+                            <input type="hidden" name="course_code" value="{{ course[1] }}">
+                            <button>Register Course</button>
+                        </form>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+

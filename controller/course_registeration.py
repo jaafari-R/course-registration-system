@@ -224,3 +224,21 @@ class CourseRegisterationController:
             return 'fail', 'Failed to retrieve course'
 
         return 'success', courses
+
+    def get_courses_most_enrolled(self):
+        courses = self.__course_reg_model.get_courses_most_enrolled()
+
+        if courses == 'fail':
+            return 'fail', 'Failed to retrieve most enrolled courses analysis'
+
+        print(courses)
+
+        return 'success', courses
+
+    def get_courses_most_popular(self):
+        courses = self.__course_reg_model.get_courses_most_popular()
+
+        if courses == 'fail':
+            return 'fail', 'Failed to retrieve most popular courses analysis'
+
+        return 'success', courses
