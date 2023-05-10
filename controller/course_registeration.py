@@ -168,3 +168,44 @@ class CourseRegisterationController:
         print(prerequisites)
 
         return 'success', course[0], prerequisites
+
+    def register_course(self, cookie, data):
+        course_code = data['course_code']
+        student_id = self.__course_reg_model.get_session_student_id(cookie)
+
+        if student_id == 'fail':
+            return 'fail', 'Failed to register course'
+        student_id = student_id[0][0]
+
+
+        passed_prereq = self.__course_reg_model.passed_prerequisites_of_course(student_id, course_code)[0]
+        if not passed_prereq:
+            return 'fail', 'Failed to register course, you have not passed this course` prerequisites'
+
+        course_available = self.__course_reg_model.is_course_available(course_code)[0]
+        if not course_available:
+            return 'fail', 'Failed to register course, the course is not available currently'
+
+
+        course_schedule = self.__course_reg_model.get_course_schedule(course_code)
+        student_courses_schedule = self.__course_reg_model.get_student_schedule(student_id)
+
+        course_start_time = course_schedule[0][0]
+        course_end_time = course_schedule[0][1]
+        course_days = course_schedule[0][2]
+        # check for clashing shcedules
+        for sc_sch in student_courses_schedule:
+            start_time = sc_sch[0]
+            end_time = sc_sch[1]
+            days = sc_sch[2]
+            for day in days:
+                if day in course_days:
+                    if (start_time <= course_start_time <= end_time) or (start_time <= course_end_time <= end_time):
+                        return 'fail', 'Failed to register course, Course schedule clashes with the schedule of already registered courses'
+
+        # Register Course
+        res = self.__course_reg_model.register_course(student_id, course_code)
+        if not res:
+            return 'fail', 'Failed to register course'
+
+        return 'success', 'Course Registered Successfully'

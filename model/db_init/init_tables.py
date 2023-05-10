@@ -87,7 +87,7 @@ def init_tables():
     try:
         db_cursor.execute("""
             CREATE TABLE studentsReg(
-                id INT PRIMARY KEY,
+                id INT PRIMARY KEY AUTO_INCREMENT,
                 student_id INT NOT NULL,
                 course_code INT NOT NULL,
                 status ENUM('passed', 'failed', 'enrolled') NOT NULL,

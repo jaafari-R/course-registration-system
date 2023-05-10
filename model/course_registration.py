@@ -319,11 +319,15 @@ class CourseRegisterationModel:
     def get_course_schedule(self, course_code):
         try:
             query = ("""
-                "SELECT start_time, end_time, days "
-                "FROM courseSchedules "
-                "WHERE id = (SELECT courseSchedules.id FROM courses WHERE code = %s)"
+                SELECT start_time, end_time, days 
+                FROM courseSchedules 
+                WHERE id IN (
+                    SELECT schedule 
+                    FROM courses 
+                    WHERE code = %s
+                )
             """)
-            data = (student_id, course_code, course_code, course_code, course_code)
+            self.__db_cursor.execute(query, (course_code,))
         except Exception as e:
             print(str(e))
             return 'fail'
@@ -333,13 +337,19 @@ class CourseRegisterationModel:
     def get_student_schedule(self, student_id):
         try:
             query = ("""
-                SELECT courseSchedules.id, courseSchedules.start_time, courseSchedules.end_time, courseSchedules.days
-                FROM courses
-                INNER JOIN studentReg ON courses.code = studentReg.course_code
-                INNER JOIN courseSchedules ON courses.schedule = courseSchedules.id
-                WHERE studentReg.student_id = %s
+                SELECT start_time, end_time, days
+                FROM courseSchedules
+                WHERE id IN (
+                    SELECT schedule
+                    FROM courses c
+                    LEFT JOIN studentsReg sr
+                    ON c.code = sr.course_code
+                    WHERE
+                        sr.student_id = %s AND
+                        sr.status = 'enrolled'
+                )
             """)
-            self.__db_cursor.execute(query, (student,))
+            self.__db_cursor.execute(query, (student_id,))
         except Exception as e:
             print(str(e))
             return 'fail'
@@ -453,3 +463,19 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'      
         return self.__db_cursor.fetchall()
+
+    # Enroll student into course
+    def register_course(self, student_id, course_code):
+        try:
+            query = ("""
+                INSERT INTO studentsReg
+                (student_id, course_code, status)
+                VALUES
+                (%s, %s, 'enrolled')
+            """)
+            data = (student_id, course_code)
+            self.__db_cursor.execute(query, data)
+        except:
+            print(str(e))
+            return False
+        return True

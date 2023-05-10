@@ -31,6 +31,7 @@ def index():
 
     return render_template('./courses.html', courses=courses)
 
+
 # view enrollable courses
 @app.route('/courses/register', methods=['GET'])
 def register_courses():
@@ -43,6 +44,7 @@ def register_courses():
         return courses
 
     return render_template('./courses.html', courses=courses, register=True)
+
 
 # view a single course
 @app.route('/courses', methods=['GET'])
@@ -58,15 +60,23 @@ def single_course():
     print(course)
     return render_template('./course.html', course=course, prerequisites=prerequisites)
 
-# student register into a cours
+
+# student register into a course
 @app.route('/course/register', methods=['POST'])
 def register_course():
     if not verify_session(request):
         return redirect(url_for('login_form'))
 
+    cookie = request.cookies.get('course_reg')
+    status, msg = course_reg_controller.register_course(cookie, request.form)
+
+    return msg
+
 
 # -- Student Registration / Login / Logout -- #
 
+
+# Register Form
 @app.route('/signup', methods=['GET'])
 def register_form():
     if verify_session(request):
@@ -75,6 +85,7 @@ def register_form():
     return render_template('./register.html')
 
 
+# Login Form
 @app.route('/signin', methods=['GET'])
 def login_form():
     if verify_session(request):
@@ -83,6 +94,7 @@ def login_form():
     return render_template('./login.html')
 
 
+# Reguster new Student
 @app.route('/signup', methods=['POST'])
 def register():
     if verify_session(request):
@@ -99,6 +111,7 @@ def register():
     return res
     
 
+# Student Login
 @app.route('/signin', methods=['POST'])
 def login():
     if verify_session(request):
