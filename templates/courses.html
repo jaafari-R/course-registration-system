@@ -18,7 +18,7 @@
                 <th>Course code</th>
                 <th>Course instructor</th>
                 <th>Course capacity</th>
-                {% if register %}
+                {% if register or enrolled %}
                     <form action="">
                     <th>Action</th>
                 {% endif %}
@@ -38,6 +38,14 @@
                             <button>Register Course</button>
                         </form>
                     </td>
+                {% endif %}
+                {% if enrolled %}
+                    <td>
+                    <form action="/course/withdraw", method="POST">
+                        <input type="hidden" name="course_code" value="{{ course[1] }}">
+                        <button>Withdraw From Course</button>
+                    </form>
+                </td>
                 {% endif %}
             </tr>
         {% endfor %}

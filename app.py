@@ -90,7 +90,7 @@ def student_courses():
     if status == 'fail':
         return courses
 
-    return render_template('./courses.html', courses=courses, course_registrations=course_registrations)
+    return render_template('./courses.html', courses=courses, course_registrations=course_registrations, enrolled=True)
 
 
 # Analysis page
@@ -143,6 +143,21 @@ def passed_courses():
         return courses
 
     return render_template('./passed_courses.html', courses=courses)
+
+
+# Student Withdraw From Course
+@app.route('/course/withdraw', methods=['POST'])
+def withdraw_from_course():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
+
+    cookie = request.cookies.get('course_reg')
+    status, msg = course_reg_controller.withdraw_student_from_course(cookie, request.form)
+
+    if status == 'fail':
+        return msg
+
+    return redirect(url_for('student_courses'))
 
 # -- Student Registration / Login / Logout -- #
 

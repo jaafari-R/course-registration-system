@@ -473,3 +473,19 @@ class CourseRegisterationModel:
             print(str(e))
             return False
         return True
+
+    # remove registration of student from a course
+    def withdraw_registration(self, student_id, course_code):
+        try:
+            query = ("""
+                DELETE FROM studentsReg
+                WHERE 
+                    student_id = %s AND
+                    course_code = %s
+                """)
+            data = (student_id, course_code)
+            self.__db_cursor.execute(query, data)
+        except:
+            print(str(e))
+            return False
+        return True
