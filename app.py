@@ -159,6 +159,35 @@ def withdraw_from_course():
 
     return redirect(url_for('student_courses'))
 
+
+
+# -- Admin Pages --
+
+@app.route('/admin/pass', methods=['GET'])
+def pass_courses():
+    cookie = request.cookies.get('course_reg')
+    status, courses, course_registrations = course_reg_controller.get_student_courses(cookie)
+
+    if status == 'fail':
+        return courses
+
+    return render_template('./courses.html', courses=courses, course_registrations=course_registrations, admin=True)
+
+
+@app.route('/course/pass', methods=['POST'])
+def pass_course_post():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
+
+    cookie = request.cookies.get('course_reg')
+    status, msg = course_reg_controller.student_pass_course(cookie, request.form)
+
+    if status == 'fail':
+        return msg
+
+    return redirect(url_for('student_courses'))
+
+
 # -- Student Registration / Login / Logout -- #
 
 # Register Form

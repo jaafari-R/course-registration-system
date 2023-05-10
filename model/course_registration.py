@@ -489,3 +489,20 @@ class CourseRegisterationModel:
             print(str(e))
             return False
         return True
+
+    # pass student a course
+    def pass_course(self, student_id, course_code):
+        try:
+            query = ("""
+                UPDATE studentsReg
+                SET status = 'passed'
+                WHERE
+                    student_id = %s AND
+                    course_code = %s
+                """)
+            data = (student_id, course_code)
+            self.__db_cursor.execute(query, data)
+        except:
+            print(str(e))
+            return False
+        return True

@@ -285,3 +285,17 @@ class CourseRegisterationController:
             return 'fail', 'Failed to withdraw from course'
 
         return 'success', 'Withdrew from course successfully'
+
+    def student_pass_course(self, cookie, data):
+        print(data)
+        student_id = self.__course_reg_model.get_session_student_id(cookie)
+        course_code = data['course_code']
+
+        if student_id == 'fail':
+            return 'fail', 'Failed to retrieve course'
+        student_id = student_id[0][0]
+
+        if not self.__course_reg_model.pass_course(student_id, course_code):
+            return 'fail', 'Failed to withdraw from course'
+
+        return 'success', 'Withdrew from course successfully'
