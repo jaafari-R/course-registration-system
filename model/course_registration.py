@@ -414,6 +414,7 @@ class CourseRegisterationModel:
                 GROUP BY c.code
                 ORDER BY reg_count DESC
             """)
+            self.__db_cursor.execute(query)
         except:
             print(str(e))
             return 'fail'      
@@ -431,6 +432,23 @@ class CourseRegisterationModel:
                 GROUP BY c.code
                 ORDER BY enroll_count DESC
             """)
+            self.__db_cursor.execute(query)
+        except:
+            print(str(e))
+            return 'fail'      
+        return self.__db_cursor.fetchall()
+
+    # get number of students enrolled into a course
+    def course_students_count(self, course_code):
+        try:
+            query = ("""
+                SELECT COUNT(*)
+                FROM sudentsReg
+                WHERE 
+                    course_code = %s AND
+                    status = 'enrolled'
+            """)
+            self.__db_cursor.execute(query, (course_code,))
         except:
             print(str(e))
             return 'fail'      
