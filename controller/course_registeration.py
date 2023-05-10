@@ -242,3 +242,14 @@ class CourseRegisterationController:
             return 'fail', 'Failed to retrieve most popular courses analysis'
 
         return 'success', courses
+
+    def get_student_passed_courses(self, cookie):
+        student_id = self.__course_reg_model.get_session_student_id(cookie)
+
+        if student_id == 'fail':
+            return 'fail', 'Failed to retrieve course'
+        student_id = student_id[0][0]
+        
+        courses = self.__course_reg_model.get_passed_courses(student_id)
+
+        return 'success', courses

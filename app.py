@@ -99,6 +99,7 @@ def analysis():
 
     return render_template('./analysis.html')
 
+
 # Most Enrolled Courses
 @app.route('/analysis/most_enrolled', methods=['GET'])
 def most_enrolled():
@@ -112,6 +113,7 @@ def most_enrolled():
 
     return render_template('./courses_analysis.html', courses=courses)
 
+
 # Most Popular Courses
 @app.route('/analysis/most_popular', methods=['GET'])
 def most_popular():
@@ -124,6 +126,21 @@ def most_popular():
         return courses
 
     return render_template('./courses_analysis.html', courses=courses, most_popular=True)
+
+
+# Student Passwed Courses
+@app.route('/student/passed')
+def passed_courses():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
+
+    cookie = request.cookies.get('course_reg')
+    status, courses = course_reg_controller.get_student_passed_courses(cookie)
+
+    if status == 'fail':
+        return courses
+
+    return render_template('./passed_courses.html', courses=courses)
 
 # -- Student Registration / Login / Logout -- #
 

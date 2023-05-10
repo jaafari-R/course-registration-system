@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/table.css') }}">
+
+    <form action="" method="GET">
+        <label for="course_code">Course code:</label>
+        <input type="number" name="course_code" id="course_code" placeholder="Course code">
+        <label for="course_name">Course name:</label>
+        <input type="text" name="course_name" id="course_name" placeholder="Course name">
+        <label for="course_instructor">Course instructor:</label>
+        <input type="text" name="course_instructor" id="course_instructor" placeholder="Course instructor">
+        <button>Search</button>
+    </form>
+    <table id="courses">
+        <tr>
+                <th>Course name</th>
+                <th>Course code</th>
+                <th>Course instructor</th>
+        </tr>
+
+        {% for course in courses %}
+            <tr>
+                <td><a href="/courses?code={{course[1]}}">{{course[0]}}</a></td>
+                <td>{{course[1]}}</td>
+                <td>{{course[2]}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -254,21 +254,17 @@ class CourseRegisterationModel:
             return 'fail'
         return self.__db_cursor.fetchall()
 
-    def get_course_scores(self, student_id):
+    def get_passed_courses(self, student_id):
         try:
             query = ("""
-                SELECT name, code, instructor, capacity, (
-                        SELECT status
-                        FROM studentReg
-                        WHERE studentReg.course_code = courses.code
-                    ) AS status
+                SELECT name, code, instructor
                 FROM courses
                 WHERE code IN (
                     SELECT course_code 
                     FROM studentsReg
                     WHERE 
                         student_id = %s AND
-                        status = 'enrolled'
+                        status = 'passed'
                 )
             """)
             self.__db_cursor.execute(query, (student_id,))
