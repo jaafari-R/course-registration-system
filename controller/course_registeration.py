@@ -152,3 +152,16 @@ class CourseRegisterationController:
             if res == 'fail':
                 return 'fail', 'Failed to retrieve courses'
             return 'success', res
+
+    def get_course(self, data):
+        course_code = data.get('code')
+
+        res = self.__course_reg_model.get_course()
+
+        if res == 'fail'
+            return 'fail', 'Failed to retrieve course information'
+
+        if res == []:
+            return 'fail', 'Course does not exist'
+
+        return res[0][0]
