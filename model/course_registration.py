@@ -357,4 +357,48 @@ class CourseRegisterationModel:
             print(str(e))
             return 'fail'      
         return self.__db_cursor.fetchall()
+        
+    def add_schedule(self, id, days, start_time, end_time, room_no):
+        try:
+            query = ("""
+            INSERT INTO courseSchedules
+            (id, days, start_time, end_time, room_no)
+            VALUES
+            (%s, %s, %s, %s, %s)
+            """)
+            data = (id, days, start_time, end_time, room_no)
+            db_cursor.execute(query, data)
+        except:
+            print(str(e))
+            return False    
+        return True
+
+    def add_course(self, code, name, description, instructor, capacity, schedule_id):
+        try:
+            query = ("""
+                INSERT INTO courses
+                (code, name, description, instructor, capacity, schedule)
+                VALUES
+                (%s, %s, %s, %s, %s, %s)
+            """)
+            data = (code, name, description, instructor, capacity, schedule_id)
+            db_cursor.execute(query, data)
+        except:
+            print(str(e))
+            return False    
+        return True
             
+    def add_prerequisites(self, course_code, prerequisite_code):
+        try:
+            query = ("""
+                INSERT INTO coursePrerequisites
+                (course, prerequisite_course)
+                VALUES
+                (%s, %s)
+            """)
+            data = (course_code, prerequisite_code)
+            db_cursor.execute(query, data)
+        except Exception as e:
+            print(str(e))
+            return False    
+        return True
