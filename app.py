@@ -70,8 +70,25 @@ def register_course():
     cookie = request.cookies.get('course_reg')
     status, msg = course_reg_controller.register_course(cookie, request.form)
 
+    if status == 'success':
+        return redirect(url_for('register_courses'))
+
     return msg
 
+
+# Student registered courses
+@app.route('/student/courses', methods=['GET'])
+def student_courses():
+    if not verify_session(request):
+        return redirect(url_for('login_form'))
+
+    cookie = request.cookies.get('course_reg')
+    status, courses = course_reg_controller.get_student_courses(cookie)
+
+    if status == 'fail':
+        return courses
+
+    return render_template('./courses.html', courses=courses,)
 
 # -- Student Registration / Login / Logout -- #
 

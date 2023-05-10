@@ -209,3 +209,18 @@ class CourseRegisterationController:
             return 'fail', 'Failed to register course'
 
         return 'success', 'Course Registered Successfully'
+
+    # return the courses the user is enrolled in
+    def get_student_courses(self, cookie):
+        student_id = self.__course_reg_model.get_session_student_id(cookie)
+
+        if student_id == 'fail':
+            return 'fail', 'Failed to retrieve course'
+        student_id = student_id[0][0]
+
+        courses = self.__course_reg_model.get_registered_courses(student_id)
+
+        if courses == 'fail':
+            return 'fail', 'Failed to retrieve course'
+
+        return 'success', courses
